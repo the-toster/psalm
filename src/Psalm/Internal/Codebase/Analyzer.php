@@ -364,6 +364,8 @@ class Analyzer
                     }
                 }
 
+                \Psalm\Internal\Fork\Pool::printMemory();
+
                 $this->progress->taskDone($has_error ? 2 : ($has_info ? 1 : 0));
             };
 
