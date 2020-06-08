@@ -453,6 +453,10 @@ class Pool
                 $block_line_parts = preg_split('/:?\s+/', trim($block_line));
 
                 if (strpos($block_line_parts[0], '_Dirty') && $block_line_parts[1] > 10000) {
+                    if (!isset($memory_types[$block_line_parts[0]])) {
+                        $memory_types[$block_line_parts[0]] = 0;
+                    }
+
                     $memory_types[$block_line_parts[0]] += $block_line_parts[1];
                 }
             }
