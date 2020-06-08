@@ -431,10 +431,12 @@ class Pool
         return $this->did_have_error;
     }
 
-    private static function filterMemoryRegions(string $report) : string {
+    private static function filterMemoryRegions(string $report) : array {
         $blocks = preg_split('/\n[0-9a-f]/', $report);
 
         $ret = '';
+
+        $memory_types = [];
 
         foreach ($blocks as $block) {
             $block_lines = explode("\n", $block);
@@ -443,7 +445,7 @@ class Pool
                 continue;
             }
 
-            $first_line = array_shift($block_lines);
+            array_shift($block_lines);
 
             $useful_lines = [];
 
@@ -451,20 +453,21 @@ class Pool
                 $block_line_parts = preg_split('/:?\s+/', trim($block_line));
 
                 if (strpos($block_line_parts[0], '_Dirty') && $block_line_parts[1] > 10000) {
-                    $useful_lines[] = $block_line;
+                    $memory_types[$block_line_parts[0]] += $block_line_parts[1];
                 }
-            }
-
-            if ($useful_lines) {
-                $ret .= $first_line . "\n" . implode("\n", $useful_lines) . "\n";
             }
         }
 
-        return $ret;
+        return $memory_types;
     }
 
     public static function printMemory() : void
     {
-        echo self::filterMemoryRegions(file_get_contents('/proc/' . posix_getpid() . '/smaps') ?: '');
+        $memory_types = self::filterMemoryRegions(
+            file_get_contents('/proc/' . posix_getpid() . '/smaps') ?: ''
+        );
+
+        echo 'Priv: ' . ($memory_types['Private_Dirty'] ?? 0) . ' kB '
+            . ' Shared: ' . ($memory_types['Shared_Dirty'] ?? 0) . " kB\n";
     }
 }
