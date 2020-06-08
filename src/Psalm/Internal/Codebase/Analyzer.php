@@ -422,6 +422,8 @@ class Analyzer
                     $file_reference_provider->setFileReferencesToMissingClassMembers([]);
                     $file_reference_provider->setReferencesToMixedMemberNames([]);
                     $file_reference_provider->setMethodParamUses([]);
+
+                    \Psalm\Internal\Fork\Pool::printMemory();
                 },
                 $analysis_worker,
                 /** @return WorkerData */
@@ -432,6 +434,8 @@ class Analyzer
                     $file_reference_provider = $codebase->file_reference_provider;
 
                     $this->progress->debug('Gathering data for forked process' . "\n");
+
+                    \Psalm\Internal\Fork\Pool::printMemory();
 
                     // @codingStandardsIgnoreStart
                     return [

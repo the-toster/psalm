@@ -131,6 +131,12 @@ class Pool
 
         $sockets = [];
 
+        echo 'Before:' . "\n\n";
+
+        \Psalm\Internal\Fork\Pool::printMemory();
+
+        echo "\n\n\n";
+
         // Fork as many times as requested to get the given
         // pool size
         for ($proc_id = 0; $proc_id < $pool_size; ++$proc_id) {
@@ -423,5 +429,42 @@ class Pool
     public function didHaveError()
     {
         return $this->did_have_error;
+    }
+
+    private static function filterMemoryRegions(string $report) : string {
+        $blocks = preg_split('/\n[0-9a-f]/', $report);
+
+        $ret = '';
+
+        foreach ($blocks as $block) {
+            $block_lines = explode("\n", $block);
+
+            if (strpos($block_lines[0], " /usr") || strpos($block_lines[0], " /lib")) {
+                continue;
+            }
+
+            $first_line = array_shift($block_lines);
+
+            $useful_lines = [];
+
+            foreach ($block_lines as $block_line) {
+                $block_line_parts = preg_split('/:?\s+/', trim($block_line));
+
+                if (strpos($block_line_parts[0], '_Dirty') && $block_line_parts[1] > 10000) {
+                    $useful_lines[] = $block_line;
+                }
+            }
+
+            if ($useful_lines) {
+                $ret .= $first_line . "\n" . implode("\n", $useful_lines) . "\n";
+            }
+        }
+
+        return $ret;
+    }
+
+    public static function printMemory() : void
+    {
+        echo self::filterMemoryRegions(file_get_contents('/proc/' . posix_getpid() . '/smaps') ?: '');
     }
 }
