@@ -335,12 +335,7 @@ class Analyzer
             function ($_, $file_path) use ($project_analyzer, $filetype_analyzers) {
                 $file_analyzer = $this->getFileAnalyzer($project_analyzer, $file_path, $filetype_analyzers);
 
-                $this->progress->debug('Analyzing ' . $file_analyzer->getFilePath() . "\n");
 
-                $file_analyzer->analyze(null);
-                $file_analyzer->context = null;
-                $file_analyzer->clearSourceBeforeDestruction();
-                unset($file_analyzer);
 
                 return IssueBuffer::getIssuesDataForFile($file_path);
             };
