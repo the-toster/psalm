@@ -333,11 +333,7 @@ class Analyzer
              * @return array
              */
             function ($_, $file_path) use ($project_analyzer, $filetype_analyzers) {
-                $file_analyzer = $this->getFileAnalyzer($project_analyzer, $file_path, $filetype_analyzers);
-
-
-
-                return IssueBuffer::getIssuesDataForFile($file_path);
+                return [];
             };
 
         $task_done_closure =
