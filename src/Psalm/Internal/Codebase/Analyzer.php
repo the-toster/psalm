@@ -355,6 +355,8 @@ class Analyzer
                     }
                 }
 
+                \Psalm\Internal\Fork\Pool::printMemory();
+
                 $this->progress->taskDone($has_error ? 2 : ($has_info ? 1 : 0));
             };
 
@@ -403,8 +405,6 @@ class Analyzer
                 $analysis_worker,
                 /** @return WorkerData */
                 function () use ($rerun) {
-                    \Psalm\Internal\Fork\Pool::printMemory();
-
                     $project_analyzer = ProjectAnalyzer::getInstance();
                     $codebase = $project_analyzer->getCodebase();
                     $analyzer = $codebase->analyzer;
@@ -412,8 +412,10 @@ class Analyzer
 
                     $this->progress->debug('Gathering data for forked process' . "\n");
 
+                    \Psalm\Internal\Fork\Pool::printMemory();
+
                     // @codingStandardsIgnoreStart
-                    $ret = [
+                    return [
                         'issues' => IssueBuffer::getIssuesData(),
                         'fixable_issue_counts' => IssueBuffer::getFixableIssues(),
                         'nonmethod_references_to_classes' => $rerun ? [] : $file_reference_provider->getAllNonMethodReferencesToClasses(),
@@ -437,11 +439,6 @@ class Analyzer
                         'used_suppressions' => $codebase->track_unused_suppressions ? IssueBuffer::getUsedSuppressions() : [],
                     ];
                     // @codingStandardsIgnoreEnd
-
-                    \Psalm\Internal\Fork\Pool::printMemory();
-
-                    return $ret;
-
                 },
                 $task_done_closure
             );

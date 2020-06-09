@@ -345,6 +345,7 @@ class Pool
                         $message = unserialize(base64_decode($serialized_message, true));
 
                         if ($message instanceof ForkProcessDoneMessage) {
+                            echo "Process completed\n";
                             $terminationMessages[] = $message->data;
                         } elseif ($message instanceof ForkTaskDoneMessage) {
                             if ($this->task_done_closure !== null) {
