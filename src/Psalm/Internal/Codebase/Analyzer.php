@@ -334,6 +334,10 @@ class Analyzer
              */
             function ($_, $file_path) use ($project_analyzer, $filetype_analyzers) {
                 usleep(10000);
+
+                \Psalm\Internal\Fork\Pool::printMemory();
+
+
                 return [];
             };
 
@@ -355,8 +359,6 @@ class Analyzer
                         $has_info = true;
                     }
                 }
-
-                \Psalm\Internal\Fork\Pool::printMemory();
 
                 $this->progress->taskDone($has_error ? 2 : ($has_info ? 1 : 0));
             };
