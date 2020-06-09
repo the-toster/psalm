@@ -74,8 +74,8 @@ $valid_long_options = [
     'error-level:',
 ];
 
-gc_collect_cycles();
-gc_disable();
+//gc_collect_cycles();
+//gc_disable();
 
 $args = array_slice($argv, 1);
 
