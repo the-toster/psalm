@@ -405,6 +405,7 @@ class Analyzer
                 $analysis_worker,
                 /** @return WorkerData */
                 function () use ($rerun) {
+                    sleep(2);
                     $project_analyzer = ProjectAnalyzer::getInstance();
                     $codebase = $project_analyzer->getCodebase();
                     $analyzer = $codebase->analyzer;
