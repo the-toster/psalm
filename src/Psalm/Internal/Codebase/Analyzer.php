@@ -333,6 +333,7 @@ class Analyzer
              * @return array
              */
             function ($_, $file_path) use ($project_analyzer, $filetype_analyzers) {
+                usleep(10);
                 return [];
             };
 
