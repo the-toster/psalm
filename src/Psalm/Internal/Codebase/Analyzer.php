@@ -393,6 +393,9 @@ class Analyzer
                 ++$i;
             }
 
+            // make first stop immediately
+            $process_file_paths[0] = [$process_file_paths[0][0]];
+
             // Run analysis one file at a time, splitting the set of
             // files up among a given number of child processes.
             $pool = new \Psalm\Internal\Fork\Pool(
@@ -405,7 +408,6 @@ class Analyzer
                 $analysis_worker,
                 /** @return WorkerData */
                 function () use ($rerun) {
-                    sleep(2);
                     $project_analyzer = ProjectAnalyzer::getInstance();
                     $codebase = $project_analyzer->getCodebase();
                     $analyzer = $codebase->analyzer;
