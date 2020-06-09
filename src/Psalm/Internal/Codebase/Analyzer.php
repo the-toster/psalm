@@ -399,22 +399,6 @@ class Analyzer
                 $process_file_paths,
                 /** @return void */
                 function () {
-                    $project_analyzer = ProjectAnalyzer::getInstance();
-                    $codebase = $project_analyzer->getCodebase();
-
-                    $file_reference_provider = $codebase->file_reference_provider;
-
-                    if ($codebase->taint) {
-                        $codebase->taint = new \Psalm\Internal\Codebase\Taint();
-                    }
-
-                    $file_reference_provider->setNonMethodReferencesToClasses([]);
-                    $file_reference_provider->setCallingMethodReferencesToClassMembers([]);
-                    $file_reference_provider->setFileReferencesToClassMembers([]);
-                    $file_reference_provider->setCallingMethodReferencesToMissingClassMembers([]);
-                    $file_reference_provider->setFileReferencesToMissingClassMembers([]);
-                    $file_reference_provider->setReferencesToMixedMemberNames([]);
-                    $file_reference_provider->setMethodParamUses([]);
 
                     \Psalm\Internal\Fork\Pool::printMemory();
                 },
