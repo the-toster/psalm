@@ -337,7 +337,6 @@ class Analyzer
 
                 \Psalm\Internal\Fork\Pool::printMemory();
 
-
                 return [];
             };
 
@@ -395,9 +394,6 @@ class Analyzer
                 $process_file_paths[$i % $pool_size][] = $file_path;
                 ++$i;
             }
-
-            // make first stop immediately
-            $process_file_paths[0] = [$process_file_paths[0][0]];
 
             // Run analysis one file at a time, splitting the set of
             // files up among a given number of child processes.
