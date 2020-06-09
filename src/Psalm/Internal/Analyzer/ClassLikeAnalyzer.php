@@ -111,12 +111,6 @@ abstract class ClassLikeAnalyzer extends SourceAnalyzer implements StatementsSou
         $this->storage = $codebase->classlike_storage_provider->get($fq_class_name);
     }
 
-    public function __destruct()
-    {
-        $this->source = null;
-        $this->file_analyzer = null;
-    }
-
     /**
      * @param  string       $method_name
      * @param  Context      $context
