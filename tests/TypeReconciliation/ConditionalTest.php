@@ -2781,6 +2781,38 @@ class ConditionalTest extends \Psalm\Tests\TestCase
                         $a->format("d-m-Y");
                     }',
             ],
+            'applyTruthyAssertionsToRightHandSideOfAssignment' => [
+                '<?php
+                    function takesAString(string $name): void {}
+
+                    function randomReturn(): ?string {
+                        return rand(1,2) === 1 ? "foo" : null;
+                    }
+
+                    $name = randomReturn();
+
+                    if ($foo = ($name !== null)) {
+                        takesAString($name);
+                    }'
+            ],
+            'maintainTruthinessInsideAssignment' => [
+                '<?php
+                    class C {
+                        public function foo() : void {}
+                    }
+
+                    class B {
+                        public ?C $c = null;
+                    }
+
+                    function updateBackgroundClip(?B $b): void {
+                        if (!$b || !($c = $b->c)) {
+                            // do something
+                        } else {
+                            $c->foo();
+                        }
+                    }'
+            ],
         ];
     }
 

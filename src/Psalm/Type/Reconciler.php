@@ -89,6 +89,13 @@ class Reconciler
 
         $old_new_types = $new_types;
 
+        // Ensure assignments evaluated after everything else is done
+        foreach ($new_types as $nk => $type) {
+            if ($nk[0] === '>') {
+                $new_types[$type[0][0]] = [['!falsy']];
+            }
+        }
+
         foreach ($new_types as $nk => $type) {
             if (strpos($nk, '[') || strpos($nk, '->')) {
                 if ($type[0][0] === '=isset'
@@ -191,6 +198,16 @@ class Reconciler
 
         // make sure array keys come after base keys
         ksort($new_types);
+
+        // Ensure assignments evaluated after everything else is done
+        foreach ($new_types as $nk => $type) {
+            if ($nk[0] === '>') {
+                unset($new_types[$nk]);
+                $new_types[substr($nk, 1)] = [['!falsy']];
+            }
+        }
+
+        var_dump($new_types);
 
         $codebase = $statements_analyzer->getCodebase();
 
