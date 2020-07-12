@@ -1111,6 +1111,7 @@ class StaticCallAnalyzer extends \Psalm\Internal\Analyzer\Statements\Expression\
 
                     if (!$context->inside_throw) {
                         if ($context->pure && !$method_storage->pure) {
+                            /** @psalm-suppress ForbiddenCode */
                             var_dump($method_storage, $class_storage);
                             if (IssueBuffer::accepts(
                                 new ImpureMethodCall(
